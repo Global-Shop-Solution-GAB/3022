@@ -1,0 +1,117 @@
+Program.Sub.ScreenSU.Start
+
+Gui.Form1..Create
+Gui.Form1..Caption("Pop-up Notification")
+Gui.Form1..Size(6825,6030)
+Gui.Form1..Position(0,0)
+Gui.Form1..AlwaysOnTop(False)
+Gui.Form1..FontName("Arial")
+Gui.Form1..FontSize(8)
+Gui.Form1..ForeColor(0)
+Gui.Form1..Backcolor(-2147483633)
+Gui.Form1..ControlBox(True)
+Gui.Form1..MaxButton(True)
+Gui.Form1..MinButton(True)
+Gui.Form1..MousePointer(0)
+Gui.Form1..Moveable(True)
+Gui.Form1..Sizeable(True)
+Gui.Form1..ShowInTaskBar(True)
+Gui.Form1..TitleBar(True)
+
+Gui.Form1..Event(unload,form1_unload)
+
+Gui.Form1.cmdok.Create(button)
+Gui.Form1.cmdok.Caption("Ok")
+Gui.Form1.cmdok.Visible(True)
+Gui.Form1.cmdok.Size(855,375)
+Gui.Form1.cmdok.Zorder(0)
+Gui.Form1.cmdok.Position(2855,5000)
+Gui.Form1.cmdok.Enabled(True)
+Gui.Form1.cmdok.FontName("Arial")
+Gui.Form1.cmdok.FontSize(8)
+Gui.Form1.cmdok.TabStop(True)
+Gui.Form1.cmdok.TabIndex(0)
+Gui.Form1.cmdok.Tooltip("")
+Gui.Form1.cmdok.ControlGroup(0)
+Gui.Form1.cmdok.DefaultValue("")
+
+Gui.Form1.cmdok.Event(click,cmdok_click)
+
+Gui.Form1.mltxtpopup.Create(textboxm)
+Gui.Form1.mltxtpopup.Visible(True)
+Gui.Form1.mltxtpopup.Size(6180,4605)
+Gui.Form1.mltxtpopup.Zorder(0)
+Gui.Form1.mltxtpopup.Position(200,200)
+Gui.Form1.mltxtpopup.Enabled(True)
+Gui.Form1.mltxtpopup.Alignment(0)
+Gui.Form1.mltxtpopup.FontName("Arial")
+Gui.Form1.mltxtpopup.FontSize(8)
+Gui.Form1.mltxtpopup.Backcolor(-2147483643)
+Gui.Form1.mltxtpopup.BorderStyle(1)
+Gui.Form1.mltxtpopup.MaxLength(0)
+Gui.Form1.mltxtpopup.NumericOnly(0)
+Gui.Form1.mltxtpopup.TabStop(True)
+Gui.Form1.mltxtpopup.TabIndex(1)
+Gui.Form1.mltxtpopup.Text("")
+Gui.Form1.mltxtpopup.Tooltip("")
+Gui.Form1.mltxtpopup.ControlGroup(0)
+Gui.Form1.mltxtpopup.DefaultValue("")
+
+
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+
+
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+' Dumur Industries
+' 8/4/08  JSO
+' Popup notification on Supply and Demand
+' Hook 14,050
+
+
+Variable.Local.spart.Declare(String)
+Variable.Local.sql.Declare(String)
+
+Function.Odbc.Connection!Con.Openconnection(Variable.Ambient.pdsn,Variable.Ambient.PUser,Variable.Ambient.PPass)
+
+Function.Intrinsic.string.gsspartstring(Variable.passed.000003,Variable.passed.000099,Variable.local.spart)
+Function.intrinsic.string.concat("select popup, crit_flag from gcg_3022_inv_popups where part = '",Variable.Local.spart,"'",Variable.Local.sql)
+Function.ODBC.Connection!Con.OpenRecordsetRO("rst1",Variable.Local.sql)
+Function.Intrinsic.Control.If(Variable.ODBC.Con!rst1.EOF,<>,True)
+	Variable.Passed.000252.Set("Popup Note")
+	Function.Intrinsic.Control.If(Variable.ODBC.Con!rst1.FieldVal!crit_flag,=,"N")
+		Function.Intrinsic.Control.CallSub(Form1_unload)
+	Function.Intrinsic.Control.Else
+		Gui.Form1.mltxtpopup.Text(Variable.ODBC.Con!rst1.FieldVal!popup)
+		Gui.Form1..Show
+	Function.Intrinsic.Control.endif
+Function.Intrinsic.Control.Else
+	Variable.Passed.000252.Set("Script 1")
+	Function.Intrinsic.Control.CallSub(Form1_unload)
+Function.Intrinsic.Control.EndIf
+
+
+
+Program.Sub.Main.End
+
+program.sub.cmdok_click.start
+Function.Intrinsic.Control.CallSub(Form1_unload)
+
+program.sub.cmdok_click.end
+
+program.sub.form1_unload.start
+Function.ODBC.Con!rst1.close
+F.ODBC.Connection!con.Close
+Function.Intrinsic.Control.End
+
+program.sub.form1_unload.end
+
+
+
+
+Program.Sub.Comments.Start
+${$0$}$$}$$}$12:00:00 AM$}$False
+Program.Sub.Comments.End

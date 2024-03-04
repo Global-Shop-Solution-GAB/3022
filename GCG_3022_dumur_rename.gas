@@ -1,0 +1,22 @@
+Program.Sub.ScreenSU.Start
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+' 7/30/08  JSO
+' Inventory screen rename Script 1 button
+' hook 10120
+
+Variable.Passed.000068.Set("Popup Maint")
+
+Program.Sub.Main.End
+
+
+
+
+Program.Sub.Comments.Start
+${$0$}$$}$$}$12:00:00 AM$}$False
+Program.Sub.Comments.End
